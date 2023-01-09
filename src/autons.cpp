@@ -248,3 +248,15 @@ void interfered_example() {
 // . . .
 // Make your own autonomous functions here!
 // . . .
+void blue_pos_1() {
+  chassis.set_drive_pid(24, DRIVE_SPEED, true);
+  chassis.wait_drive();
+
+
+}
+
+void red_pos_1() {
+  chassis.set_drive_pid(24, DRIVE_SPEED, true);
+  chassis.wait_drive();
+
+}

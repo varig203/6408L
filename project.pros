@@ -188,8 +188,9 @@
       }
     },
     "upload_options": {
-      "description": "Funny Cannon",
-      "slot": 2
+      "description": "Sling shady",
+      "slot": 1,
+      "icon": "pros"
     }
   }
 }
