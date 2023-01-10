@@ -77,8 +77,8 @@ void initialize() {
 
   // Autonomous Selector using LLEMU
   ez::as::auton_selector.add_autons({
-    Auton("Blue side position roller back\n\nSpecific code to run for the back side roller", blue_pos_1), // Reminder edit the autons.hpp after adding the function to autons.cpp
-    Auton("Red Side position roller back\n\n", red_pos_1),
+    Auton("Blue side position roller back\n\nSpecific program to run for the blue back side roller", blue_pos_1),
+    Auton("Red Side position roller back\n\nSpecific program to run the red front side roller", red_pos_1), // Reminder edit the autons.hpp after adding the function to autons.cpp
     
     /*Auton("Example Drive\n\nDrive forward and come back.", drive_example),                               
     Auton("Example Turn\n\nTurn 3 times.", turn_example),
@@ -158,6 +158,9 @@ void autonomous() {
  * operator control task will be stopped. Re-enabling the robot will restart the
  * task, not resume it from where it left off.
  */
+
+#define LAUNCHER_PORT 1 // Temporary port 1 
+
 void opcontrol() {
   // This is preference to what you like to drive on.
   chassis.set_drive_brake(MOTOR_BRAKE_BRAKE);
@@ -174,11 +177,26 @@ void opcontrol() {
     // Put more user control code here!
     // . . .
 
-    
+    pros::Motor launcher (LAUNCHER_PORT, MOTOR_GEARSET_36);
+
+    while (true) {
+      if (master.get_digital(DIGITAL_R1)) {
+        launcher.move_velocity(50);
+      }
+      else if (master.get_digital(DIGITAL_R2)) {
+        launcher.move_velocity(-50);
+      }
+      else {
+        launcher.move_velocity(0);
+      }
+
+      pros::delay(2);
+    }
 
     /* 
     General
     Port 18 = Radio reciever
+    Port 1 = Launcher
     Chassis:
     Port 16 = Back Left
     Port 17 = Front Left

@@ -1,7 +1,7 @@
 {
   "py/object": "pros.conductor.project.Project",
   "py/state": {
-    "project_name": "RailCannon",
+    "project_name": "Sling shady",
     "target": "v5",
     "templates": {
       "EZ-Template": {
