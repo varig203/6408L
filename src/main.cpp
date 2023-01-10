@@ -160,6 +160,7 @@ void autonomous() {
  */
 
 #define LAUNCHER_PORT 1 // Temporary port 1 
+#define LATCH_PORT 2 // Temporary port 2
 
 void opcontrol() {
   // This is preference to what you like to drive on.
@@ -178,13 +179,20 @@ void opcontrol() {
     // . . .
 
     pros::Motor launcher (LAUNCHER_PORT, MOTOR_GEARSET_36);
-
+    pros::Motor latch (LAUNCHER_PORT, MOTOR_GEARSET_18);
+    
     while (true) {
       if (master.get_digital(DIGITAL_R1)) {
         launcher.move_velocity(50);
       }
       else if (master.get_digital(DIGITAL_R2)) {
         launcher.move_velocity(-50);
+      }
+      else if (master.get_digital(DIGITAL_Y)) {
+        latch.move_velocity(50);
+      }
+      else if (master.get_digital(DIGITAL_X)) {
+        latch.move_velocity(-50);
       }
       else {
         launcher.move_velocity(0);
