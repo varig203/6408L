@@ -166,8 +166,8 @@ void opcontrol() {
   // This is preference to what you like to drive on.
   chassis.set_drive_brake(MOTOR_BRAKE_BRAKE);
   // Defining vars
-  pros::Motor launcher (LAUNCHER_PORT, MOTOR_GEARSET_36);
-  pros::Motor latch (LAUNCHER_PORT, MOTOR_GEARSET_18);
+  pros::Motor launcher (LAUNCHER_PORT, MOTOR_GEARSET_36); // Launcher Port
+  pros::Motor latch (LATCH_PORT, MOTOR_GEARSET_18); // Latch Port
   while (true) {
 
     //chassis.tank(); // Tank control
@@ -182,23 +182,33 @@ void opcontrol() {
     
     //while (true) {
     if (master.get_digital(DIGITAL_R1)) {
-      launcher.move_velocity(50); // move launcher forward
+      launcher.move_velocity(75); // move launcher forward
+      pros::delay(2);
     }
     else if (master.get_digital(DIGITAL_R2)) {
-      launcher.move_velocity(-50); // move launcher backward
+      launcher.move_velocity(-100); // move launcher backward
+      pros::delay(2);
     }
     else if (master.get_digital(DIGITAL_Y)) {
       latch.move_velocity(50); // move latch down
+      pros::delay(2);
     }
     else if (master.get_digital(DIGITAL_X)) {
       latch.move_velocity(-50); // move latch up
+      pros::delay(2);
+    }
+    else if (master.get_digital(DIGITAL_UP)) {
+      launcher.move_velocity(-100);
+      pros::delay(10000);
+      launcher.move_velocity(0);
+      latch.move_velocity(50);
+      pros::delay(1000);
+      latch.move_velocity(0);
     }
     else {
       launcher.move_velocity(0); // resets velocity
       latch.move_velocity(0);
     }
-
-    pros::delay(2);
     }
 
     /* 
