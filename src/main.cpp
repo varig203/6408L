@@ -165,7 +165,9 @@ void autonomous() {
 void opcontrol() {
   // This is preference to what you like to drive on.
   chassis.set_drive_brake(MOTOR_BRAKE_BRAKE);
-
+  // Defining vars
+  pros::Motor launcher (LAUNCHER_PORT, MOTOR_GEARSET_36);
+  pros::Motor latch (LAUNCHER_PORT, MOTOR_GEARSET_18);
   while (true) {
 
     //chassis.tank(); // Tank control
@@ -177,28 +179,26 @@ void opcontrol() {
     // . . .
     // Put more user control code here!
     // . . .
-
-    pros::Motor launcher (LAUNCHER_PORT, MOTOR_GEARSET_36);
-    pros::Motor latch (LAUNCHER_PORT, MOTOR_GEARSET_18);
     
-    while (true) {
-      if (master.get_digital(DIGITAL_R1)) {
-        launcher.move_velocity(50);
-      }
-      else if (master.get_digital(DIGITAL_R2)) {
-        launcher.move_velocity(-50);
-      }
-      else if (master.get_digital(DIGITAL_Y)) {
-        latch.move_velocity(50);
-      }
-      else if (master.get_digital(DIGITAL_X)) {
-        latch.move_velocity(-50);
-      }
-      else {
-        launcher.move_velocity(0);
-      }
+    //while (true) {
+    if (master.get_digital(DIGITAL_R1)) {
+      launcher.move_velocity(50); // move launcher forward
+    }
+    else if (master.get_digital(DIGITAL_R2)) {
+      launcher.move_velocity(-50); // move launcher backward
+    }
+    else if (master.get_digital(DIGITAL_Y)) {
+      latch.move_velocity(50); // move latch down
+    }
+    else if (master.get_digital(DIGITAL_X)) {
+      latch.move_velocity(-50); // move latch up
+    }
+    else {
+      launcher.move_velocity(0); // resets velocity
+      latch.move_velocity(0);
+    }
 
-      pros::delay(2);
+    pros::delay(2);
     }
 
     /* 
@@ -215,4 +215,4 @@ void opcontrol() {
 
     pros::delay(ez::util::DELAY_TIME); // This is used for timer calculations!  Keep this ez::util::DELAY_TIME
   }
-}
+//}
