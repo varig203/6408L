@@ -168,6 +168,8 @@ void opcontrol() {
   // Defining vars
   pros::Motor launcher (LAUNCHER_PORT, MOTOR_GEARSET_36); // Launcher Port
   pros::Motor latch (LATCH_PORT, MOTOR_GEARSET_18); // Latch Port
+  launcher.set_brake_mode(MOTOR_BRAKE_HOLD);
+  latch.set_brake_mode(MOTOR_BRAKE_HOLD);
   while (true) {
 
     //chassis.tank(); // Tank control
@@ -182,34 +184,49 @@ void opcontrol() {
     
     //while (true) {
     if (master.get_digital(DIGITAL_R1)) {
-      launcher.move_velocity(75); // move launcher forward
+      launcher.move_velocity(80); // pulls back
       pros::delay(2);
     }
     else if (master.get_digital(DIGITAL_R2)) {
-      launcher.move_velocity(-100); // move launcher backward
+      launcher.move_velocity(-100); // release
       pros::delay(2);
     }
-    else if (master.get_digital(DIGITAL_Y)) {
-      latch.move_velocity(50); // move latch down
-      pros::delay(2);
-    }
-    else if (master.get_digital(DIGITAL_X)) {
-      latch.move_velocity(-50); // move latch up
-      pros::delay(2);
-    }
+    /*
+    positive launcher = pull back
+    negative launcher = release
+    positive latch = latch on
+    negative latch = latch off
+    */
     else if (master.get_digital(DIGITAL_UP)) {
       launcher.move_velocity(-100);
-      pros::delay(10000);
+      pros::delay(4300);
       launcher.move_velocity(0);
       latch.move_velocity(50);
-      pros::delay(1000);
+      pros::delay(1500);
       latch.move_velocity(0);
+      //pros::delay(5000);
+      launcher.move_velocity(100);
+      pros::delay(4100);
+      launcher.move_velocity(0);
+      latch.move_velocity(-50);
+      pros::delay(2000);
     }
     else {
       launcher.move_velocity(0); // resets velocity
+    }
+    if (master.get_digital(DIGITAL_X)) {
+      latch.move_velocity(50); // latch on 
+      pros::delay(2);
+    }
+    else if (master.get_digital(DIGITAL_Y)) {
+      latch.move_velocity(-50); // latch off
+      pros::delay(2);
+    }
+    else {
       latch.move_velocity(0);
     }
-    }
+  }
+  
 
     /* 
     General
