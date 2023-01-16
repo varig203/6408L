@@ -161,7 +161,8 @@ void autonomous() {
 
 #define LAUNCHER_PORT 1 // Temporary port 1 
 #define LATCH_PORT 2 // Temporary port 2
-#define INTAKE_PORT 3 // Temporary port 3
+#define INTAKE_PORT 9 // Temporary port 3
+#define EXPANSION_PORT 4 // Temp port 4
 
 void opcontrol() {
   // This is preference to what you like to drive on.
@@ -169,11 +170,13 @@ void opcontrol() {
   // Defining vars
   pros::Motor launcher (LAUNCHER_PORT, MOTOR_GEARSET_36); // Launcher Port
   pros::Motor latch (LATCH_PORT, MOTOR_GEARSET_18); // Latch Port
-  pros::Motor intake (INTAKE_PORT,MOTOR_GEARSET_18); // Intake port
+  pros::Motor intake (INTAKE_PORT, MOTOR_GEARSET_6); // Intake port
+  pros::Motor expansion (EXPANSION_PORT, MOTOR_GEARSET_18); // expansion port
   // setting brake modes
   launcher.set_brake_mode(MOTOR_BRAKE_HOLD);
   intake.set_brake_mode(MOTOR_BRAKE_COAST);
   latch.set_brake_mode(MOTOR_BRAKE_HOLD);
+  expansion.set_brake_mode(MOTOR_BRAKE_COAST);
   // drive loop
   while (true) {
 
@@ -208,17 +211,18 @@ void opcontrol() {
 
     // automatic pull back/release
     else if (master.get_digital(DIGITAL_UP)) {
+      // release
       launcher.move_velocity(-100);
-      pros::delay(4300);
+      pros::delay(4350);
       launcher.move_velocity(0);
-      latch.move_velocity(50);
+      latch.move_velocity(-50); // latch release
       pros::delay(1500);
       latch.move_velocity(0);
       //pros::delay(5000);
-      launcher.move_velocity(100);
-      pros::delay(4100);
+      launcher.move_velocity(100); // pull back
+      pros::delay(4700);
       launcher.move_velocity(0);
-      latch.move_velocity(-50);
+      latch.move_velocity(50); //latch lock
       pros::delay(2000);
     }
     else {
@@ -240,15 +244,24 @@ void opcontrol() {
 
     // Intake
     if (master.get_digital(DIGITAL_L1)) {
-      intake.move_velocity(100);
+      intake.move_velocity(450);
       pros::delay(2);
     }
     else if (master.get_digital(DIGITAL_L2)) {
-      intake.move_velocity(-100);
+      intake.move_velocity(-300);
       pros::delay(2);
     }
     else {
       intake.move_velocity(0);
+    }
+
+    // Expansion
+    if (master.get_digital(DIGITAL_B)) {
+      expansion.move_velocity(100);
+      pros::delay(2);
+    }
+    else {
+      expansion.move_velocity(0);
     }
   }
   
