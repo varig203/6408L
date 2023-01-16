@@ -170,9 +170,11 @@ void opcontrol() {
   pros::Motor launcher (LAUNCHER_PORT, MOTOR_GEARSET_36); // Launcher Port
   pros::Motor latch (LATCH_PORT, MOTOR_GEARSET_18); // Latch Port
   pros::Motor intake (INTAKE_PORT,MOTOR_GEARSET_18); // Intake port
+  // setting brake modes
   launcher.set_brake_mode(MOTOR_BRAKE_HOLD);
   intake.set_brake_mode(MOTOR_BRAKE_COAST);
   latch.set_brake_mode(MOTOR_BRAKE_HOLD);
+  // drive loop
   while (true) {
 
     //chassis.tank(); // Tank control
@@ -186,6 +188,8 @@ void opcontrol() {
     // . . .
     
     //while (true) {
+
+    // launcher pull back/release
     if (master.get_digital(DIGITAL_R1)) {
       launcher.move_velocity(80); // pulls back
       pros::delay(2);
@@ -194,12 +198,15 @@ void opcontrol() {
       launcher.move_velocity(-100); // release
       pros::delay(2);
     }
+    
     /*
     positive launcher = pull back
     negative launcher = release
     positive latch = latch on
     negative latch = latch off
     */
+
+    // automatic pull back/release
     else if (master.get_digital(DIGITAL_UP)) {
       launcher.move_velocity(-100);
       pros::delay(4300);
@@ -217,6 +224,7 @@ void opcontrol() {
     else {
       launcher.move_velocity(0); // resets velocity
     }
+
     // latch
     if (master.get_digital(DIGITAL_X)) {
       latch.move_velocity(50); // latch on 
@@ -229,6 +237,7 @@ void opcontrol() {
     else {
       latch.move_velocity(0);
     }
+
     // Intake
     if (master.get_digital(DIGITAL_L1)) {
       intake.move_velocity(100);
