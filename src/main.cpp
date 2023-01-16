@@ -161,6 +161,7 @@ void autonomous() {
 
 #define LAUNCHER_PORT 1 // Temporary port 1 
 #define LATCH_PORT 2 // Temporary port 2
+#define INTAKE_PORT 3 // Temporary port 3
 
 void opcontrol() {
   // This is preference to what you like to drive on.
@@ -168,7 +169,9 @@ void opcontrol() {
   // Defining vars
   pros::Motor launcher (LAUNCHER_PORT, MOTOR_GEARSET_36); // Launcher Port
   pros::Motor latch (LATCH_PORT, MOTOR_GEARSET_18); // Latch Port
+  pros::Motor intake (INTAKE_PORT,MOTOR_GEARSET_18); // Intake port
   launcher.set_brake_mode(MOTOR_BRAKE_HOLD);
+  intake.set_brake_mode(MOTOR_BRAKE_COAST);
   latch.set_brake_mode(MOTOR_BRAKE_HOLD);
   while (true) {
 
@@ -214,6 +217,7 @@ void opcontrol() {
     else {
       launcher.move_velocity(0); // resets velocity
     }
+    // latch
     if (master.get_digital(DIGITAL_X)) {
       latch.move_velocity(50); // latch on 
       pros::delay(2);
@@ -224,6 +228,18 @@ void opcontrol() {
     }
     else {
       latch.move_velocity(0);
+    }
+    // Intake
+    if (master.get_digital(DIGITAL_L1)) {
+      intake.move_velocity(100);
+      pros::delay(2);
+    }
+    else if (master.get_digital(DIGITAL_L2)) {
+      intake.move_velocity(-100);
+      pros::delay(2);
+    }
+    else {
+      intake.move_velocity(0);
     }
   }
   
